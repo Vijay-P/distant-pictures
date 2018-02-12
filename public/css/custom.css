@@ -1,0 +1,16 @@
+.head{
+    margin-top: 5vh;
+}
+.snapshot {
+    height: 360px;
+    width: 640px;
+    background-color: black;
+}
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+h3{
+    text-align: center;
+}
