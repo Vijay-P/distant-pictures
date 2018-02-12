@@ -17,6 +17,7 @@ var socket = io();
 //-- Addition: Forward the `Take a picture` button-press to the webserver.
 function takePicture() {
 	socket.emit('takePicture');
+	load_imgs();
 }
 
 //-- Addition: This function receives the new image name and applies it to html element.
