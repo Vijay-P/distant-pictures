@@ -27,7 +27,7 @@ var serverPort = 8000;
 var SerialPort = require('serialport'); // serial library
 var Readline = SerialPort.parsers.Readline; // read serial data as lines
 //-- Addition:
-var NodeWebcam = require( "node-webcam" );// load the webcam module
+var NodeWebcam = require("node-webcam"); // load the webcam module
 
 //---------------------- WEBAPP SERVER SETUP ---------------------------------//
 // use express to create the simple webapp
@@ -36,13 +36,13 @@ app.use(express.static('public')); // find pages in public directory
 // check to make sure that the user provides the serial port for the Arduino
 // when running the server
 if (!process.argv[2]) {
-  console.error('Usage: node ' + process.argv[1] + ' SERIAL_PORT');
-  process.exit(1);
+	console.error('Usage: node ' + process.argv[1] + ' SERIAL_PORT');
+	process.exit(1);
 }
 
 // start the server and say what port it is on
 http.listen(serverPort, function() {
-  console.log('listening on *:%s', serverPort);
+	console.log('listening on *:%s', serverPort);
 });
 //----------------------------------------------------------------------------//
 
@@ -50,28 +50,28 @@ http.listen(serverPort, function() {
 //----------------------------WEBCAM SETUP------------------------------------//
 //Default options
 var opts = { //These Options define how the webcam is operated.
-    //Picture related
-    width: 1280, //size
-    height: 720,
-    quality: 100,
-    //Delay to take shot
-    delay: 0,
-    //Save shots in memory
-    saveShots: true,
-    // [jpeg, png] support varies
-    // Webcam.OutputTypes
-    output: "jpeg",
-    //Which camera to use
-    //Use Webcam.list() for results
-    //false for default device
-    device: false,
-    // [location, buffer, base64]
-    // Webcam.CallbackReturnTypes
-    callbackReturn: "location",
-    //Logging
-    verbose: false
+	//Picture related
+	width: 1280, //size
+	height: 720,
+	quality: 100,
+	//Delay to take shot
+	delay: 0,
+	//Save shots in memory
+	saveShots: true,
+	// [jpeg, png] support varies
+	// Webcam.OutputTypes
+	output: "jpeg",
+	//Which camera to use
+	//Use Webcam.list() for results
+	//false for default device
+	device: false,
+	// [location, buffer, base64]
+	// Webcam.CallbackReturnTypes
+	callbackReturn: "location",
+	//Logging
+	verbose: false
 };
-var Webcam = NodeWebcam.create( opts ); //starting up the webcam
+var Webcam = NodeWebcam.create(opts); //starting up the webcam
 //----------------------------------------------------------------------------//
 
 
@@ -80,18 +80,18 @@ var Webcam = NodeWebcam.create( opts ); //starting up the webcam
 // start the serial port connection and read on newlines
 const serial = new SerialPort(process.argv[2], {});
 const parser = new Readline({
-  delimiter: '\r\n'
+	delimiter: '\r\n'
 });
 
 // Read data that is available on the serial port and send it to the websocket
 serial.pipe(parser);
 parser.on('data', function(data) {
-  console.log('Data:', data);
-  io.emit('server-msg', data);
-  switch (data){
-   case "light":
-    snap();
-  }
+	console.log('Data:', data);
+	io.emit('server-msg', data);
+	switch (data) {
+		case "light":
+			snap();
+	}
 });
 //----------------------------------------------------------------------------//
 
@@ -100,46 +100,42 @@ parser.on('data', function(data) {
 // this is the websocket event handler and say if someone connects
 // as long as someone is connected, listen for messages
 io.on('connect', function(socket) {
-  console.log('a user connected');
+	console.log('a user connected');
 
-  // if you get the 'ledON' msg, send an 'H' to the Arduino
-  socket.on('ledON', function() {
-    console.log('ledON');
-    serial.write('H');
-  });
+	// if you get the 'ledON' msg, send an 'H' to the Arduino
+	socket.on('ledON', function() {
+		console.log('ledON');
+		serial.write('H');
+	});
 
-  // if you get the 'ledOFF' msg, send an 'L' to the Arduino
-  socket.on('ledOFF', function() {
-    console.log('ledOFF');
-    serial.write('L');
-  });
+	// if you get the 'ledOFF' msg, send an 'L' to the Arduino
+	socket.on('ledOFF', function() {
+		console.log('ledOFF');
+		serial.write('L');
+	});
 
-  //-- Addition: This function is called when the client clicks on the `Take a picture` button.
-  socket.on('takePicture', snap);
-  
-  // if you get the 'disconnect' message, say the user disconnected
-  socket.on('disconnect', function() {
-    console.log('user disconnected');
-  });
+	//-- Addition: This function is called when the client clicks on the `Take a picture` button.
+	socket.on('takePicture', snap);
+
+	// if you get the 'disconnect' message, say the user disconnected
+	socket.on('disconnect', function() {
+		console.log('user disconnected');
+	});
 });
 //----------------------------------------------------------------------------//
 
 function snap() {
-  /// First, we create a name for the new picture.
-  /// The .replace() function removes all special characters from the date.
-  /// This way we can use it as the filename.
-  var imageName = new Date().toString().replace(/[&\/\\#,+()$~%.'":*?<>{}\s-]/g, '');
+	/// First, we create a name for the new picture.
+	/// The .replace() function removes all special characters from the date.
+	/// This way we can use it as the filename.
+	var imageName = new Date().toString().replace(/[&\/\\#,+()$~%.'":*?<>{}\s-]/g, '');
 
-  console.log('making a making a picture at'+ imageName); // Second, the name is logged to the console.
+	console.log('making a making a picture at' + imageName); // Second, the name is logged to the console.
 
-  //Third, the picture is  taken and saved to the `public/`` folder
-  NodeWebcam.capture('public/'+imageName, opts, function( err, data ) {
-  io.emit('newPicture',(imageName+'.jpg'));
-  });
-  ///Lastly, the new name is send to the client web browser.
-  /// The browser will take this new name and load the picture from the public folder.
+	//Third, the picture is  taken and saved to the `public/`` folder
+	NodeWebcam.capture('public/' + imageName, opts, function(err, data) {
+		io.emit('newPicture', (imageName + '.jpg'));
+	});
+	///Lastly, the new name is send to the client web browser.
+	/// The browser will take this new name and load the picture from the public folder.
 }
-
-
-
-
