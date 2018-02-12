@@ -1,9 +1,9 @@
 .head{
-    margin-top: 5vh;
+    margin-top: 1vh;
 }
 .snapshot {
-    height: 480px;
-    width: 640px;
+    height: 240px;
+    width: 320px;
     background-color: black;
 }
 .center{
