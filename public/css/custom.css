@@ -6,6 +6,11 @@ body{
 .head{
     margin-top: 1vh;
 }
+.snapshot-frame{
+    height: 260px;
+    width: 340px;
+    background-color: black;
+}
 .snapshot {
     height: 240px;
     width: 320px;
