@@ -146,7 +146,7 @@ function snap() {
 
 	//Third, the picture is  taken and saved to the `public/`` folder
 	NodeWebcam.capture('public/gallery/' + imageName, opts, function(err, data) {
-		gm("gallery/" + imageName + '.jpg').sharpen(2[, 5]);
+		gm("gallery/" + imageName + '.jpg').sharpen(3);
 		io.emit('newPicture', ("gallery/" + imageName + '.jpg'));
 	});
 	///Lastly, the new name is send to the client web browser.
