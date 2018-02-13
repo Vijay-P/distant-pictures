@@ -28,10 +28,19 @@ var SerialPort = require('serialport'); // serial library
 var Readline = SerialPort.parsers.Readline; // read serial data as lines
 //-- Addition:
 var NodeWebcam = require("node-webcam"); // load the webcam module
+var fs = require('fs')
 
 //---------------------- WEBAPP SERVER SETUP ---------------------------------//
 // use express to create the simple webapp
 app.use(express.static('public')); // find pages in public directory
+
+app.get('/gallery', function (req, res){
+	var filelist = [];
+	fs.readdirSync('public/gallery').forEach(file => {
+		filelist.push(file);
+	});
+	res.json(JSON.stringify(filelist));
+});
 
 // check to make sure that the user provides the serial port for the Arduino
 // when running the server

@@ -9,12 +9,10 @@ function load_imgs() {
 	$.ajax({
 		url: folder,
 		success: function(data) {
-			console.log(data);
-			$(data).find("a").attr("href", function(i, val) {
-				if (val.match(/\.(jpg|png|gif)$/)) {
-					$("#gallery").append("<img class='gallery-image' src='" + folder + val + "'>");
-				}
-			});
+			var flist = JSON.parse(data);
+			for (i=0; i<flist.length; i++){
+				$("#gallery").append("<img class='gallery-image' src='" + folder + flist[i] + "'>");
+			}
 		}
 	});
 }
