@@ -19,7 +19,9 @@ function takePicture() {
 	$(".snapshot-frame").css("background-color", "white");
 	socket.emit('takePicture');
 	load_imgs();
-	setTimeout(function(){$(".snapshot-frame").css("background-color", "black");}, 1);
+	setTimeout(function() {
+		$(".snapshot-frame").css("background-color", "black");
+	}, 1500);
 }
 
 //-- Addition: This function receives the new image name and applies it to html element.
