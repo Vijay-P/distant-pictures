@@ -21,7 +21,7 @@ function takePicture() {
 	load_imgs();
 	setTimeout(function() {
 		$(".snapshot-frame").css("background-color", "black");
-	}, 1500);
+	}, 200);
 }
 
 //-- Addition: This function receives the new image name and applies it to html element.
