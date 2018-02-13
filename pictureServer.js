@@ -29,12 +29,15 @@ var Readline = SerialPort.parsers.Readline; // read serial data as lines
 //-- Addition:
 var NodeWebcam = require("node-webcam"); // load the webcam module
 var fs = require('fs')
+var gm = require('gm').subClass({
+	imageMagick: true
+});
 
 //---------------------- WEBAPP SERVER SETUP ---------------------------------//
 // use express to create the simple webapp
 app.use(express.static('public')); // find pages in public directory
 
-app.get('/gallery', function (req, res){
+app.get('/gallery', function(req, res) {
 	var filelist = [];
 	fs.readdirSync('public/gallery').forEach(file => {
 		filelist.push(file);
@@ -143,6 +146,7 @@ function snap() {
 
 	//Third, the picture is  taken and saved to the `public/`` folder
 	NodeWebcam.capture('public/gallery/' + imageName, opts, function(err, data) {
+		gm("gallery/" + imageName + '.jpg').sharpen(2[, 5]);
 		io.emit('newPicture', ("gallery/" + imageName + '.jpg'));
 	});
 	///Lastly, the new name is send to the client web browser.
